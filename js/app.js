@@ -1,5 +1,4 @@
-// Задачите идват от data/tasks.js (генерира се от tools/build_tasks.py)
-const DATA = window.TASKS;
+// Тренажор „Детектив“: всяка задача идва нова от генератора (js/gen.js)
 
 // ---------- мини-нотация -> HTML: x^2, *, #=▢, @=◯
 function fm(s){
@@ -38,79 +37,90 @@ document.querySelectorAll('.wrap p, .tool .f, .tool div, .cheat td, .cheat li').
   if (el.innerHTML.includes('$')) el.innerHTML = rich(el.innerHTML);
 });
 
-// ---------- състояние
-let done = new Set();
-try { done = new Set(JSON.parse(localStorage.getItem('razlagane-done') || '[]')); } catch(e){}
-function saveDone(){ try { localStorage.setItem('razlagane-done', JSON.stringify([...done])); } catch(e){} }
-let pi = 0, si = 0, chain = [], seen = new Set(), locked = false;
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+};
 
-const $ = id => document.getElementById(id);
-function chips(){
-  const groups = {};
-  DATA.forEach((p, k) => (groups[p.g] = groups[p.g] || []).push(k));
-  $('chips').innerHTML = Object.entries(groups).map(([g, ks]) =>
-    '<div class="chipgroup"><span>' + g + '</span>' + ks.map(k =>
-      '<button type="button" class="chip' + (k === pi ? ' on' : '') + (done.has(k) ? ' done' : '') + '" data-k="' + k + '" aria-label="Задача ' + (k+1) + '">' + (k+1) + '</button>').join('') + '</div>').join('');
-  $('chips').querySelectorAll('.chip').forEach(b => b.onclick = () => load(+b.dataset.k));
-}
-function flow(node){
-  document.querySelectorAll('#fc .nd').forEach(g => {
-    const id = g.id.slice(2);
-    g.classList.toggle('now', id === node);
-    g.classList.toggle('seen', seen.has(id) && id !== node);
-  });
-}
-function load(k){
-  pi = k; si = 0; locked = false;
-  const p = DATA[pi];
-  chain = [{e: p.t, n: 'условие'}];
-  seen = new Set(['START']);
-  $('lbl').textContent = 'Задача ' + (pi+1) + ' · ' + p.g;
-  $('big').innerHTML = fm(p.t);
-  chips(); render();
-}
-function render(){
-  const p = DATA[pi];
-  $('chain').innerHTML = chain.map((c, k) => '<div class="row">' + (k ? '<span class="m">=</span>' : '') + fm(c.e) +
-    (c.n ? '<span class="hand">' + rich(c.n) + '</span>' : '') + '</div>').join('');
-  if (si >= p.steps.length){ finish(); return; }
-  const s = p.steps[si];
-  seen.add(s.node); flow(s.node);
-  $('prog').textContent = 'Стъпка ' + (si+1) + ' от ' + p.steps.length;
-  $('stage').innerHTML = '<div class="q">' + rich(s.q) + '</div><div class="opts">' +
-    s.opts.map((o, k) => '<button type="button" class="opt" data-k="' + k + '">' + rich(o) + '</button>').join('') +
-    '</div><div class="fb" id="fb" aria-live="polite"></div>';
-  $('stage').querySelectorAll('.opt').forEach(b => b.onclick = () => answer(+b.dataset.k, b));
-  locked = false;
-}
-function answer(k, btn){
-  if (locked) return;
-  const s = DATA[pi].steps[si], fb = $('fb');
-  if (k !== s.ok){
-    btn.classList.add('bad'); btn.classList.remove('shake'); void btn.offsetWidth; btn.classList.add('shake');
-    fb.className = 'fb bad'; fb.innerHTML = 'Не съвсем. ' + rich(s.hint);
-    return;
+(function(){
+  const $ = id => document.getElementById(id);
+  const TOPICS = GEN.TOPICS;
+  let topic = store.get('razlagane-topic', 'mix');
+  if (!TOPICS[topic]) topic = 'mix';
+  const solved = store.get('razlagane-solved', {});
+  let P = null, si = 0, chain = [], seen = new Set(), locked = false, count = 0, wrongs = 0;
+
+  function topicChips(){
+    const total = Object.values(solved).reduce((s, n) => s + n, 0);
+    $('chips').innerHTML = Object.entries(TOPICS).map(([k, tp]) => {
+      const n = k === 'mix' ? total : (solved[k] || 0);
+      return '<button type="button" class="chip topic' + (k === topic ? ' on' : '') + '" data-t="' + k + '" aria-pressed="' + (k === topic) + '">' +
+        tp.name + (n ? '<small title="решени задачи">' + n + '</small>' : '') + '</button>';
+    }).join('');
+    $('chips').querySelectorAll('.chip').forEach(b => b.onclick = () => {
+      topic = b.dataset.t; store.set('razlagane-topic', topic); newTask();
+    });
   }
-  locked = true;
-  btn.classList.add('good');
-  $('stage').querySelectorAll('.opt').forEach(b => b.disabled = true);
-  fb.className = 'fb good'; fb.innerHTML = 'Точно! ' + (s.note ? rich(s.note) : '');
-  if (s.e) chain.push({e: s.e, n: s.note || ''});
-  setTimeout(() => { si++; render(); }, s.e ? 1100 : 750);
-}
-function finish(){
-  const p = DATA[pi];
-  seen.add('END'); flow('END'); done.add(pi); saveDone(); chips();
-  $('prog').textContent = 'Готово: ' + p.steps.length + ' стъпки';
-  const ok = p.fin !== 'не се разлага';
-  $('stage').innerHTML = '<div class="final"><div class="hand" style="color:var(--ok)">Разложено!</div>' +
-    (ok ? fm(p.t + '=' + p.fin) : fm(p.t) + ' <b>не се разлага</b>') +
-    '<div class="check">' + (ok ? 'Проверка: ако умножим обратно, получаваме пак ' + fm(p.t) + '.' : 'Сбор на квадрати няма формула за разлагане.') + '</div></div>' +
-    '<div style="margin-top:14px">' + (pi + 1 < DATA.length ? '<button class="btn" id="next" type="button">Следваща задача</button>' : '<span class="hand">Решихте всички задачи!</span>') + '</div>';
-  const n = $('next'); if (n) n.onclick = () => load(pi + 1);
-}
-$('restart').onclick = () => load(pi);
+  function flow(node){
+    document.querySelectorAll('#fc .nd').forEach(g => {
+      const id = g.id.slice(2);
+      g.classList.toggle('now', id === node);
+      g.classList.toggle('seen', seen.has(id) && id !== node);
+    });
+  }
+  function begin(){
+    si = 0; locked = false; wrongs = 0;
+    chain = [{e: P.t, n: 'условие'}];
+    seen = new Set(['START']);
+    $('lbl').textContent = 'Задача ' + count + ' · ' + P.g;
+    $('big').innerHTML = fm(P.t);
+    topicChips(); render();
+  }
+  function newTask(){ P = GEN.make(topic); count++; begin(); }
 
-const start = st => load(Math.min(Math.max(+(st && st.pi) || 0, 0), DATA.length - 1));
-window.claude?.hot?.snapshot?.(() => ({pi}));
-window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+  function render(){
+    $('chain').innerHTML = chain.map((c, k) => '<div class="row">' + (k ? '<span class="m">=</span>' : '') + fm(c.e) +
+      (c.n ? '<span class="hand">' + rich(c.n) + '</span>' : '') + '</div>').join('');
+    if (si >= P.steps.length){ finish(); return; }
+    const s = P.steps[si];
+    seen.add(s.node); flow(s.node);
+    $('prog').textContent = 'Стъпка ' + (si + 1) + ' от ' + P.steps.length;
+    $('stage').innerHTML = '<div class="q">' + rich(s.q) + '</div><div class="opts">' +
+      s.opts.map((o, k) => '<button type="button" class="opt" data-k="' + k + '">' + rich(o) + '</button>').join('') +
+      '</div><div class="fb" id="fb" aria-live="polite"></div>';
+    $('stage').querySelectorAll('.opt').forEach(b => b.onclick = () => answer(+b.dataset.k, b));
+    locked = false;
+  }
+  function answer(k, btn){
+    if (locked) return;
+    const s = P.steps[si], fb = $('fb');
+    if (k !== s.ok){
+      wrongs++;
+      btn.classList.add('bad'); btn.classList.remove('shake'); void btn.offsetWidth; btn.classList.add('shake');
+      fb.className = 'fb bad'; fb.innerHTML = 'Не съвсем. ' + rich(s.hint);
+      return;
+    }
+    locked = true;
+    btn.classList.add('good');
+    $('stage').querySelectorAll('.opt').forEach(b => b.disabled = true);
+    fb.className = 'fb good'; fb.innerHTML = 'Точно! ' + (s.note ? rich(s.note) : '');
+    if (s.e) chain.push({e: s.e, n: s.note || ''});
+    setTimeout(() => { si++; render(); }, s.e ? 1100 : 750);
+  }
+  function finish(){
+    seen.add('END'); flow('END');
+    solved[P.topic] = (solved[P.topic] || 0) + 1; store.set('razlagane-solved', solved); topicChips();
+    $('prog').textContent = 'Готово: ' + P.steps.length + ' стъпки' + (wrongs ? ', грешки: ' + wrongs : ', без грешка!');
+    const ok = P.fin !== GEN.NOFACT;
+    $('stage').innerHTML = '<div class="final"><div class="hand" style="color:var(--ok)">' + (ok ? 'Разложено!' : 'Хвана капана!') + '</div>' +
+      (ok ? fm(P.t + '=' + P.fin) : fm(P.t) + ' <b>не се разлага</b>') +
+      '<div class="check">' + (ok ? 'Проверка: ако умножим обратно, получаваме пак ' + fm(P.t) + '.' : 'Сбор на квадрати няма формула за разлагане.') + '</div></div>' +
+      '<div style="margin-top:14px"><button class="btn" id="next" type="button">Нова задача</button></div>';
+    $('next').onclick = newTask;
+    $('next').focus({preventScroll: true});
+  }
+  $('restart').onclick = () => { if (P) begin(); };
+  $('newtask').onclick = newTask;
+
+  newTask();
+})();

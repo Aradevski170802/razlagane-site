@@ -17,7 +17,8 @@
     <div class="eyebrow">Математика · 7. клас</div>
     <h1>Разлагане на множители</h1>
     <p class="thesis">Да разложиш многочлен значи да намериш <b>страните на правоъгълник</b>, когато знаеш лицето му.</p>
-    <p>Лицето е $6x^2+9x$. Страните са $3x$ и $2x+3$. Значи $6x^2+9x=3x(2x+3)$. Всички четири начина по-долу са този трик. Тренажорът след тях води стъпка по стъпка по блок-схемата.</p>
+    <p>Лицето е $6x^2+9x$. Страните са $3x$ и $2x+3$. Значи $6x^2+9x=3x(2x+3)$. Всички четири начина по-долу са този трик. Тренажорът след тях води стъпка по стъпка по блок-схемата, а тестът проверява какво си научил. Задачите са всеки път нови.</p>
+    <nav class="toc" aria-label="Съдържание"><a href="#tools">Инструменти</a><a href="#trainer">Тренажор</a><a href="#test">Тест</a><a href="#cheat">Шпаргалка</a></nav>
   </div>
   <div class="panel" aria-label="Правоъгълник с лице 6x² + 9x">
     <svg viewBox="0 0 360 230" width="100%" role="img" aria-label="Правоъгълник с височина 3x и ширина 2x+3, разделен на части 6x² и 9x">
@@ -104,7 +105,7 @@
         <div class="chain" id="chain"></div>
         <div id="stage"></div>
         <div class="meta"><span id="prog"></span>
-          <span><button class="btn ghost" id="restart" type="button">Започни отначало</button></span></div>
+          <span class="btns"><button class="btn ghost" id="restart" type="button">Започни отначало</button><button class="btn ghost" id="newtask" type="button">Друга задача</button></span></div>
       </div>
     </div>
     <aside class="panel flow" aria-label="Блок-схема на алгоритъма">
@@ -133,6 +134,11 @@
   </div>
 </section>
 
+<section id="test">
+  <h2>Тест</h2>
+  <div class="panel quiz" id="quiz"></div>
+</section>
+
 <section id="cheat">
   <h2>Шпаргалка</h2>
   <div class="cheat">
@@ -158,10 +164,12 @@
     </div>
   </div>
 </section>
-<footer>Всички задачи в тренажора са проверени: всеки междинен израз е равен на началния.</footer>
+<footer>Задачите се генерират случайно и всяка се проверява автоматично: всеки междинен израз е равен на началния.</footer>
 </div>
 
-<script src="data/tasks.js"></script>
+<script src="js/poly.js"></script>
+<script src="js/gen.js"></script>
 <script src="js/app.js"></script>
+<script src="js/quiz.js"></script>
 </body>
 </html>

@@ -104,6 +104,44 @@ button:focus-visible{outline:3px solid var(--pen); outline-offset:2px}
 #fc .el{fill:var(--muted); font-size:11.5px; font-weight:600}
 #ah path{fill:var(--muted)}
 
+/* съдържание */
+.toc{display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:20px; font-weight:600}
+.toc a{color:var(--pen); text-decoration:none; border-bottom:2px solid var(--pen-soft); padding-bottom:1px}
+.toc a:hover{border-color:var(--pen)}
+
+/* теми (тренажор и тест) */
+.chip.topic{padding:0 12px; display:inline-flex; align-items:center; gap:6px}
+.chip small{font-size:12px; font-weight:600; padding:0 6px; border-radius:99px; background:var(--pen-soft); color:var(--pen)}
+.chip.on small{background:rgba(255,255,255,.25); color:#fff}
+.btns{display:flex; flex-wrap:wrap; gap:8px}
+.btn:disabled{opacity:.45; cursor:default}
+
+/* тест */
+.quiz .lead{margin:0 0 14px; max-width:36em}
+.quiz .lbl{font-size:14px; color:var(--muted); margin:0 0 6px}
+.qhead{display:flex; justify-content:space-between; gap:10px; font-size:14px; color:var(--muted)}
+.bar{height:6px; background:var(--pen-soft); border-radius:99px; overflow:hidden; margin:8px 0 16px}
+.bar i{display:block; height:100%; background:var(--pen); transition:width .3s}
+.opt.sel{border-color:var(--pen); background:var(--pen-soft)}
+.qnav{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-top:20px}
+.result{text-align:center; padding:6px 0 4px}
+.score{font-family:var(--f-display); font-size:clamp(36px,7vw,52px); line-height:1.1}
+.grade{font-size:34px; margin-top:4px}
+.g6,.g5{color:var(--ok)} .g4{color:var(--pen)} .g3,.g2{color:var(--red)}
+.muted{color:var(--muted); font-size:14px}
+.revh{margin:26px 0 8px; font-size:17px}
+.review{margin:0; padding-left:24px; display:grid; gap:10px}
+.review li{border-left:3px solid var(--line); padding:6px 0 6px 12px}
+.review li.ok{border-color:var(--ok)}
+.review li.bad{border-color:var(--red)}
+.review .rq{font-weight:500}
+.review .rq .m{font-size:19px}
+.review .why{color:var(--muted); font-size:15px}
+.hist{margin-top:22px}
+.hist table{border-collapse:collapse; width:100%; font-size:15px}
+.hist td{padding:6px 8px 6px 0; border-bottom:1px solid var(--line)}
+.hist td:first-child{color:var(--muted)}
+
 /* шпаргалка */
 .cheat{display:grid; grid-template-columns:1fr 1fr; gap:16px}
 .cheat ol{margin:0; padding-left:22px; display:grid; gap:6px}
