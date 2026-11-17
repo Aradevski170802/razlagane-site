@@ -27,6 +27,10 @@
   const powEq = (m, k) => { const s = ms(m); return /^([a-z]|\d+)$/.test(s) ? s + '^' + k : par(s) + '^' + k; };
   const eqP = (T, m, k) => /^[a-z]$/.test(ms(m)) ? T : T + '=' + powEq(m, k);
   const terms = s => parsePoly(s).terms();
+  // „Числата 6, 9 се делят на 3“; ако всички числа са еднакви — без повторения
+  const uniq = cs => [...new Set(cs)];
+  const divText = (cs, d) => uniq(cs).length === 1 ? 'Всички членове имат множител ' + d : 'Числата ' + uniq(cs).join(', ') + ' се делят на ' + d;
+  const gcdText = (cs, d) => uniq(cs).length === 1 ? 'Числото във всеки член е ' + d + '.' : 'НОД(' + uniq(cs).join(', ') + ') = ' + d + '.';
 
   // ---------- стъпки
   const YN = ['да', 'не'];
@@ -99,12 +103,12 @@
       t, fin, path: ['cf'],
       wrong: wrongInner.map(w => G + par(w)),
       steps: [
-        Q1(true, d > 1 ? 'Числата ' + coefs.join(', ') + ' се делят на ' + d + (e ? ', а $' + v + '$ има във всеки член.' : '.') : '$' + v + '$ има във всеки член.'),
+        Q1(true, d > 1 ? divText(coefs, d) + (e ? ', а $' + v + '$ има във всеки член.' : '.') : '$' + v + '$ има във всеки член.'),
         A1(G, [
           e && d > 1 ? String(d) : '', e && d > 1 ? pw(v, e) : '', co(d, pw(v, e + 1)),
           maxC !== d ? co(maxC, pw(v, e)) : '', e >= 2 ? co(d, pw(v, e - 1)) : '', !e ? co(d, v) : '', !e ? co(d, pw(v, 2)) : '', !e ? v : '',
         ], fin,
-          (d > 1 ? 'НОД(' + coefs.join(', ') + ') = ' + d + '.' : 'Числата нямат общ делител, по-голям от 1.') +
+          (d > 1 ? gcdText(coefs, d) : 'Числата нямат общ делител, по-голям от 1.') +
           (e ? ' Буквата $' + v + '$ е във всеки член, най-малката степен е $' + pw(v, e) + '$.' : ' Буквата $' + v + '$ я няма във всеки член, затова изнасяме само числото.') +
           ' Значи $' + G + '$.',
           'делим всеки член на $' + G + '$'),
@@ -288,7 +292,7 @@
       steps: [
         Q1(false, '$' + ts[3] + '$ няма $' + v + '$.'),
         Q2('изразът', 4, '$' + ts.join('$, $') + '$.'),
-        groupSteps(ts, 'Така двете скоби няма да станат еднакви. Опитай първите два и последните два члена.'),
+        groupSteps(ts, 'Вземи първите два и последните два члена: така двете скоби стават еднакви.'),
         exprChoice('B4', 'Изнеси общ множител от всяка група.', step2,
           [v + par(lin) + (neg ? '' : '+') + qf, v + '^2' + par(lin) + (neg ? '' : '+') + co(neg ? -q : q, par(linFlip))],
           {e: step2, hint: 'От $' + sum(ts[0], ts[1]) + '$ изнасяме $' + v + '^2$ (най-малката степен). От $' + sum(ts[2], ts[3]) + '$ изнасяме $' + (neg ? -q : q) + '$.',
@@ -325,7 +329,7 @@
       steps: [
         Q1(false, '$' + ts[3] + '$ няма буква.'),
         Q2('изразът', 4, '$' + ts.join('$, $') + '$.'),
-        groupSteps(ts, 'Така няма да се получат еднакви скоби. Вземи първите два и последните два члена.'),
+        groupSteps(ts, 'Вземи първите два и последните два члена: така двете скоби стават еднакви.'),
         factorStep,
         exprChoice('B4', 'Изнеси общата скоба.', fin, [par(wp) + par(sum(u, String(-q))), par(sum(u, String(p))) + par(sum(w, String(q)))],
           {e: fin, hint: 'Скобата $(' + wp + ')$ се повтаря. Остава $(' + uq + ')$.'}),
@@ -338,8 +342,8 @@
   // 4. Комбинирани: няколко начина един след друг
   function commonFactor(k, v, e, coefs){
     const G = ms(M(k, v, e));
-    const hintQ1 = k > 1 ? 'Числата ' + coefs.join(', ') + ' се делят на ' + k + (e ? ', а $' + v + '$ има във всеки член.' : '.') : '$' + v + '$ има във всеки член.';
-    const hintA1 = (k > 1 ? 'НОД(' + coefs.join(', ') + ') = ' + k + '.' : '') +
+    const hintQ1 = k > 1 ? divText(coefs, k) + (e ? ', а $' + v + '$ има във всеки член.' : '.') : '$' + v + '$ има във всеки член.';
+    const hintA1 = (k > 1 ? gcdText(coefs, k) : '') +
       (e ? ' Буквата $' + v + '$ е във всеки член, най-малката степен е $' + pw(v, e) + '$.' : ' Буквата $' + v + '$ я няма във всеки член, затова изнасяме само $' + k + '$.');
     return {G, hintQ1, hintA1};
   }
@@ -432,7 +436,7 @@
       steps: [
         Q1(false, '$' + ts[3] + '$ няма $' + v + '$.'),
         Q2('изразът', 4, '$' + ts.join('$, $') + '$.'),
-        groupSteps(ts, 'Така двете скоби няма да станат еднакви. Вземи първите два и последните два члена.'),
+        groupSteps(ts, 'Вземи първите два и последните два члена: така двете скоби стават еднакви.'),
         exprChoice('B4', 'Изнеси общ множител от всяка група.', step2, [v + '^2' + par(lin) + co(-r * r, par(linFlip)), v + '^2' + par(lin) + '+' + co(r * r, par(lin))],
           {e: step2, hint: 'От $' + sum(ts[2], ts[3]) + '$ изнасяме $' + (-r * r) + '$: получаваме $' + co(-r * r, par(lin)) + '$.', note: 'еднакви скоби: $(' + lin + ')$'}),
         exprChoice('B4', 'Изнеси общата скоба.', mid, [par(lin) + par(v + '^2+' + r * r), par(quad) + '+' + par(lin)],
@@ -501,14 +505,21 @@
   }
 
   const recent = [];
-  function make(topic){
+  // вид задача (име на генератора) -> тема
+  const KIND_TOPIC = {};
+  for (const tk in TOPICS) (TOPICS[tk].gens || []).forEach(([g]) => { KIND_TOPIC[g.name] = tk; });
+
+  // make('form') дава задача от темата; make('form', 'dsq') — точно от този вид
+  function make(topic, kind){
+    if (kind && KIND_TOPIC[kind]) topic = KIND_TOPIC[kind];
     for (let tries = 0; tries < 400; tries++){
       const tk = topic === 'mix' || !TOPICS[topic] ? weighted(MIX) : topic;
+      const gen = kind && KIND_TOPIC[kind] ? TOPICS[tk].gens.find(([g]) => g.name === kind)[0] : weighted(TOPICS[tk].gens);
       let p = null;
-      try { p = weighted(TOPICS[tk].gens)(); } catch(e){ p = null; }
+      try { p = gen(); } catch(e){ p = null; }
       if (!p || recent.includes(p.t)) continue;
       if (!validate(p)){ console.warn('[gen] отхвърлена задача', p.t); continue; }
-      p.topic = tk; p.g = TOPICS[tk].name;
+      p.topic = tk; p.g = TOPICS[tk].name; p.kind = gen.name;
       recent.push(p.t); if (recent.length > 80) recent.shift();
       return p;
     }
@@ -577,10 +588,10 @@
 
   function quizItem(topic){
     const p = make(topic), r = Math.random();
-    if (r < .2) return methodQ(p);
-    if (r < .4 && p.fin !== NOFACT) return checkQ(p);
-    return factorQ(p);
+    const it = r < .2 ? methodQ(p) : r < .4 && p.fin !== NOFACT ? checkQ(p) : factorQ(p);
+    it.p = p;          // цялата задача: стъпките стават решението в PDF-а
+    return it;
   }
 
-  window.GEN = {TOPICS, make, quizItem, validate, NOFACT};
+  window.GEN = {TOPICS, make, quizItem, validate, NOFACT, METHOD, SHORT};
 })();

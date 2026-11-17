@@ -129,6 +129,11 @@ button:focus-visible{outline:3px solid var(--pen); outline-offset:2px}
 .grade{font-size:34px; margin-top:4px}
 .g6,.g5{color:var(--ok)} .g4{color:var(--pen)} .g3,.g2{color:var(--red)}
 .muted{color:var(--muted); font-size:14px}
+.pdfbox{margin-top:18px; border:2px dashed var(--pen); border-radius:10px; padding:14px 16px; display:grid; gap:10px}
+.pdfrow{display:flex; flex-wrap:wrap; align-items:center; gap:8px 10px}
+.pdfrow label{font-size:14px; color:var(--muted)}
+.pdfrow input{font:16px var(--f-body); color:var(--ink); background:var(--card); border:1.5px solid var(--line); border-radius:8px; padding:9px 12px; min-width:0; flex:1 1 180px; max-width:280px}
+.pdfrow input:focus{outline:3px solid var(--pen-soft); border-color:var(--pen)}
 .revh{margin:26px 0 8px; font-size:17px}
 .review{margin:0; padding-left:24px; display:grid; gap:10px}
 .review li{border-left:3px solid var(--line); padding:6px 0 6px 12px}

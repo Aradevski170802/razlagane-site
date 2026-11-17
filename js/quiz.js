@@ -76,6 +76,9 @@
       '<div class="result"><div class="score">' + score + ' / ' + N + '</div>' +
       '<div class="hand grade g' + g.n + '">' + g.name + ' ' + g.n + '</div>' +
       '<div class="muted">Време ' + clock(secs) + ' · ' + esc(TOPICS[qtopic].name) + '</div></div>' +
+      '<div class="pdfbox"><div><b>PDF с пълните решения</b><div class="muted">Кои отговори са верни, решение на всяка задача стъпка по стъпка, какво да упражняваш и нови задачи с отговори.</div></div>' +
+        '<div class="pdfrow"><label for="qname">Име (по желание)</label><input id="qname" type="text" maxlength="60" autocomplete="name" value="' + esc(store.get('razlagane-name', '')) + '">' +
+        '<button class="btn" id="qpdf" type="button">Изтегли PDF</button></div><div class="muted" id="qpdfmsg" aria-live="polite"></div></div>' +
       '<div class="qnav" style="justify-content:flex-start"><button class="btn" id="qagain" type="button">Нов тест</button><button class="btn ghost" id="qback" type="button">Друга тема</button></div>' +
       '<h3 class="revh">Отговорите</h3><ol class="review">' + items.map((it, i) => {
         const a = answers[i], ok = a === it.ok;
@@ -85,6 +88,22 @@
           (ok ? '' : '<div>Верен отговор: ' + rich(it.opts[it.ok]) + '</div>') +
           '<div class="why">' + rich(it.why) + '</div></li>';
       }).join('') + '</ol>';
+    const report = {items, answers: answers.slice(), secs, topic: qtopic, date: Date.now()};
+    const btn = document.getElementById('qpdf'), msg = document.getElementById('qpdfmsg');
+    btn.onclick = async () => {
+      const name = document.getElementById('qname').value.trim();
+      store.set('razlagane-name', name);
+      btn.disabled = true; msg.textContent = 'Подготвям PDF…';
+      try {
+        await REPORT.download(Object.assign({}, report, {name}));
+        msg.textContent = 'Готово: файлът е в изтеглените файлове.';
+      } catch(e){
+        console.error(e);
+        msg.textContent = 'Не успях да направя PDF. Провери интернет връзката и опитай пак.';
+      }
+      btn.disabled = false;
+    };
+    window.lastTestReport = report;   // за проверка от конзолата
     document.getElementById('qagain').onclick = start;
     document.getElementById('qback').onclick = () => { setup(); box.scrollIntoView({behavior: 'smooth', block: 'start'}); };
     box.scrollIntoView({behavior: 'smooth', block: 'start'});
