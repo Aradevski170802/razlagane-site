@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Разлагане на множители</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:ital@1&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header class="hero">
+  <div>
+    <div class="eyebrow">Математика · 7. клас</div>
+    <h1>Разлагане на множители</h1>
+    <p class="thesis">Да разложиш многочлен значи да намериш <b>страните на правоъгълник</b>, когато знаеш лицето му.</p>
+    <p>Лицето е $6x^2+9x$. Страните са $3x$ и $2x+3$. Значи $6x^2+9x=3x(2x+3)$. Всички четири начина по-долу са този трик. Тренажорът след тях води стъпка по стъпка по блок-схемата.</p>
+  </div>
+  <div class="panel" aria-label="Правоъгълник с лице 6x² + 9x">
+    <svg viewBox="0 0 360 230" width="100%" role="img" aria-label="Правоъгълник с височина 3x и ширина 2x+3, разделен на части 6x² и 9x">
+      <rect x="70" y="50" width="170" height="140" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="2"/>
+      <rect x="240" y="50" width="90" height="140" fill="var(--card)" stroke="var(--ink)" stroke-width="2"/>
+      <text x="155" y="128" text-anchor="middle" font-size="26" class="mt" fill="var(--ink)">6x²</text>
+      <text x="285" y="128" text-anchor="middle" font-size="26" class="mt" fill="var(--ink)">9x</text>
+      <text x="155" y="38" text-anchor="middle" font-size="20" class="mt" fill="var(--pen)">2x</text>
+      <text x="285" y="38" text-anchor="middle" font-size="20" class="mt" fill="var(--pen)">3</text>
+      <text x="44" y="126" text-anchor="middle" font-size="20" class="mt" fill="var(--pen)">3x</text>
+      <path d="M70 216 H330" stroke="var(--pen)" stroke-width="1.5"/>
+      <text x="200" y="212" text-anchor="middle" font-size="15" fill="var(--muted)">ширина 2x + 3</text>
+    </svg>
+  </div>
+</header>
+
+<section id="tools">
+  <h2>Четирите инструмента</h2>
+  <div class="tools">
+    <div class="panel tool">
+      <svg viewBox="0 0 150 120" width="100%" role="img" aria-label="Правоъгълник с височина k и ширини a и b">
+        <rect x="24" y="22" width="70" height="70" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+        <rect x="94" y="22" width="44" height="70" fill="var(--card)" stroke="var(--ink)" stroke-width="1.6"/>
+        <text x="59" y="62" text-anchor="middle" class="mt" font-size="16" fill="var(--ink)">ka</text>
+        <text x="116" y="62" text-anchor="middle" class="mt" font-size="16" fill="var(--ink)">kb</text>
+        <text x="59" y="16" text-anchor="middle" class="mt" font-size="14" fill="var(--pen)">a</text>
+        <text x="116" y="16" text-anchor="middle" class="mt" font-size="14" fill="var(--pen)">b</text>
+        <text x="12" y="62" text-anchor="middle" class="mt" font-size="14" fill="var(--pen)">k</text>
+      </svg>
+      <div><span class="pill">общ множител във всички</span><h3>1. Общ множител</h3>
+        Еднаква височина: изваждаме я пред скоба.<div class="f">$ka+kb=k(a+b)$</div></div>
+    </div>
+    <div class="panel tool">
+      <svg viewBox="0 0 150 120" width="100%" role="img" aria-label="Квадрат без ъгъл се пренарежда в правоъгълник">
+        <path d="M8 18 H70 V60 H50 V80 H8 Z" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+        <rect x="50" y="18" width="20" height="20" fill="none" stroke="var(--muted)" stroke-dasharray="3 2"/>
+        <text x="39" y="104" text-anchor="middle" font-size="12" fill="var(--muted)">a² − b²</text>
+        <path d="M76 50 h12" stroke="var(--pen)" stroke-width="2" marker-end="url(#ah2)"/>
+        <rect x="94" y="30" width="50" height="34" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+        <text x="119" y="104" text-anchor="middle" font-size="12" fill="var(--muted)">(a−b)(a+b)</text>
+        <defs><marker id="ah2" viewBox="0 0 8 8" refX="6" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="var(--pen)"/></marker></defs>
+      </svg>
+      <div><span class="pill">2 члена</span><h3>2. Разлика на квадрати</h3>
+        Два квадрата с минус между тях.<div class="f">$#^2-@^2=(#-@)(#+@)$</div></div>
+    </div>
+    <div class="panel tool">
+      <svg viewBox="0 0 150 120" width="100%" role="img" aria-label="Квадрат разделен на a², ab, ab и b²">
+        <rect x="30" y="12" width="64" height="64" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+        <rect x="94" y="12" width="32" height="64" fill="var(--card)" stroke="var(--ink)" stroke-width="1.6"/>
+        <rect x="30" y="76" width="64" height="32" fill="var(--card)" stroke="var(--ink)" stroke-width="1.6"/>
+        <rect x="94" y="76" width="32" height="32" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+        <text x="62" y="49" text-anchor="middle" class="mt" font-size="16" fill="var(--ink)">a²</text>
+        <text x="110" y="49" text-anchor="middle" class="mt" font-size="13" fill="var(--ink)">ab</text>
+        <text x="62" y="97" text-anchor="middle" class="mt" font-size="13" fill="var(--ink)">ab</text>
+        <text x="110" y="97" text-anchor="middle" class="mt" font-size="13" fill="var(--ink)">b²</text>
+      </svg>
+      <div><span class="pill">3 члена</span><h3>3. Точен квадрат</h3>
+        Два квадрата и средният член е $2·#·@$.<div class="f">$#^2±2#@+@^2=(#±@)^2$</div></div>
+    </div>
+    <div class="panel tool">
+      <svg viewBox="0 0 150 120" width="100%" role="img" aria-label="Два правоъгълника с обща ширина x+y образуват един">
+        <rect x="34" y="14" width="96" height="52" fill="var(--pen-soft)" stroke="var(--ink)" stroke-width="1.6"/>
+        <rect x="34" y="66" width="96" height="34" fill="var(--card)" stroke="var(--ink)" stroke-width="1.6"/>
+        <text x="82" y="45" text-anchor="middle" class="mt" font-size="14" fill="var(--ink)">a(x+y)</text>
+        <text x="82" y="88" text-anchor="middle" class="mt" font-size="14" fill="var(--ink)">3(x+y)</text>
+        <text x="20" y="45" text-anchor="middle" class="mt" font-size="13" fill="var(--pen)">a</text>
+        <text x="20" y="88" text-anchor="middle" class="mt" font-size="13" fill="var(--pen)">3</text>
+        <text x="82" y="114" text-anchor="middle" class="mt" font-size="13" fill="var(--pen)">x + y</text>
+      </svg>
+      <div><span class="pill">4 члена</span><h3>4. Групиране</h3>
+        Две групи с еднаква скоба се „слепват“.<div class="f">$a(x+y)+3(x+y)=(x+y)(a+3)$</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="trainer">
+  <h2>Тренажор „Детектив“</h2>
+  <div class="trainer">
+    <div class="panel">
+      <div class="chips" id="chips"></div>
+      <div class="task">
+        <div class="lbl" id="lbl"></div>
+        <div class="big" id="big"></div>
+        <div class="chain" id="chain"></div>
+        <div id="stage"></div>
+        <div class="meta"><span id="prog"></span>
+          <span><button class="btn ghost" id="restart" type="button">Започни отначало</button></span></div>
+      </div>
+    </div>
+    <aside class="panel flow" aria-label="Блок-схема на алгоритъма">
+      <h3>Къде сме в блок-схемата</h3>
+      <svg id="fc" viewBox="0 0 330 520" width="100%" role="img" aria-label="Блок-схема: общ множител, брой членове, формули или групиране, повтаряне">
+        <defs><marker id="ah" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L8 4 L0 8 z"/></marker></defs>
+        <path class="ed" d="M120 47 V68"/>
+        <path class="ed" d="M200 100 H240"/><text class="el" x="206" y="93">да</text>
+        <path class="ed" d="M120 132 V170"/><text class="el" x="126" y="155">не</text>
+        <path class="ed" d="M285 122 V400 H202"/>
+        <path class="ed" d="M88 222 L44 270"/><path class="ed" d="M120 232 V270"/><path class="ed" d="M152 222 L196 270"/>
+        <path class="ed" d="M44 326 L96 380"/><path class="ed" d="M120 326 V368"/><path class="ed" d="M196 326 L146 380"/>
+        <path class="ed" d="M40 400 H12 V200 H38"/><text class="el" x="16" y="392">да</text>
+        <path class="ed" d="M120 432 V462"/><text class="el" x="126" y="452">не</text>
+        <g class="nd" id="n-START"><rect x="65" y="13" width="110" height="34" rx="17"/><text x="120" y="35">Начало</text></g>
+        <g class="nd" id="n-Q1"><polygon points="120,68 200,100 120,132 40,100"/><text x="120" y="97">Общ множител</text><text x="120" y="112">за всички?</text></g>
+        <g class="nd" id="n-A1"><rect x="240" y="78" width="88" height="44" rx="4"/><text x="284" y="105">Изнеси го</text></g>
+        <g class="nd" id="n-Q2"><polygon points="120,170 202,200 120,232 38,200"/><text x="120" y="197">Колко</text><text x="120" y="212">члена?</text></g>
+        <g class="nd" id="n-B2"><rect x="6" y="270" width="78" height="56" rx="4"/><text x="45" y="290">2 члена</text><text x="45" y="305">квадрати</text><text x="45" y="319">/ кубове</text></g>
+        <g class="nd" id="n-B3"><rect x="88" y="270" width="64" height="56" rx="4"/><text x="120" y="290">3 члена</text><text x="120" y="305">точен</text><text x="120" y="319">квадрат</text></g>
+        <g class="nd" id="n-B4"><rect x="156" y="270" width="80" height="56" rx="4"/><text x="196" y="295">4 члена</text><text x="196" y="311">групиране</text></g>
+        <g class="nd" id="n-Q5"><polygon points="120,368 202,400 120,432 38,400"/><text x="120" y="397">Разлага ли се</text><text x="120" y="412">още нещо?</text></g>
+        <g class="nd" id="n-END"><rect x="65" y="462" width="110" height="34" rx="17"/><text x="120" y="484">Готово</text></g>
+      </svg>
+    </aside>
+  </div>
+</section>
+
+<section id="cheat">
+  <h2>Шпаргалка</h2>
+  <div class="cheat">
+    <div class="panel">
+      <h3 style="margin-top:0">Редът винаги е един и същ</h3>
+      <ol>
+        <li><b>Общ множител?</b> Ако има, изнеси го първо.</li>
+        <li><b>Преброй членовете</b> (в скобата, която остана).</li>
+        <li><b>2 члена:</b> разлика на квадрати или кубове. <b>3 члена:</b> точен квадрат. <b>4 члена:</b> групиране.</li>
+        <li><b>Разлага ли се още нещо?</b> Ако да, повтори от стъпка 2 за тази скоба.</li>
+        <li><b>Проверка:</b> умножи обратно.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3 style="margin-top:0">Формулите отдясно наляво</h3>
+      <table>
+        <tr><td>Разлика на квадрати</td><td>$#^2-@^2=(#-@)(#+@)$</td></tr>
+        <tr><td>Точен квадрат</td><td>$#^2±2#@+@^2=(#±@)^2$</td></tr>
+        <tr><td>Сбор на кубове</td><td>$#^3+@^3=(#+@)(#^2-#@+@^2)$</td></tr>
+        <tr><td>Разлика на кубове</td><td>$#^3-@^3=(#-@)(#^2+#@+@^2)$</td></tr>
+        <tr><td class="trap">Капан</td><td class="trap">$x^2+9$ не се разлага. А $x:x=1$, не нула!</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+<footer>Всички задачи в тренажора са проверени: всеки междинен израз е равен на началния.</footer>
+</div>
+
+<script src="data/tasks.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
